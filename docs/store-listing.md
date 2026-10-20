@@ -14,7 +14,7 @@ Copy these into Partner Center when you create the submission. Every text below 
 | Privacy policy URL | `https://nisarkhan4u-hash.github.io/nisar-office-studio/privacy-policy.html` |
 | Website | `https://github.com/nisarkhan4u-hash/nisar-office-studio` |
 | Support contact info | `https://github.com/nisarkhan4u-hash/nisar-office-studio/issues` |
-| Copyright and trademark info | Copyright © 2026 Nisar. Open source under the MIT licence. |
+| Copyright and trademark info | Copyright © 2026 Nisar Ahmad. Open source under the MIT License. |
 
 ## Short description (Store "Short description", up to 1,000 characters)
 

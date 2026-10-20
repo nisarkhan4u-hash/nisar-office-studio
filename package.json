@@ -4,7 +4,7 @@
   "version": "3.0.1",
   "description": "A free, open-source, private word processor and PDF editor for Windows",
   "main": "main.js",
-  "author": "Nisar",
+  "author": "Nisar Ahmad",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
@@ -36,7 +36,7 @@
   "build": {
     "appId": "com.nisar.officestudio",
     "productName": "Nisar Office Studio",
-    "copyright": "Copyright © 2026 Nisar",
+    "copyright": "Copyright © 2026 Nisar Ahmad",
     "files": [
       "main.js",
       "preload.js",
