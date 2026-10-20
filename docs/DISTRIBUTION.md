@@ -33,7 +33,7 @@ What only you can do: create the accounts (they need your own identity), and cli
    git config user.name "Nisar"
    git config user.email "<your ...@users.noreply.github.com address>"
    git add -A
-   git commit -m "Nisar Office Studio 3.0.0"
+   git commit -m "Nisar Office Studio 3.0.1"
    git branch -M main
    git remote add origin https://github.com/nisarkhan4u-hash/nisar-office-studio.git
    git push -u origin main
@@ -80,7 +80,7 @@ cd "C:\Nisar Word"
 npm run dist:store
 ```
 
-The result is `C:\Nisar Word\dist\NisarOfficeStudio-3.0.0.appx` (about 225 MB). It is not signed, which is correct for the Store: Microsoft signs it. The build stops with a clear message if Step 4 has not been done yet.
+The result is `C:\Nisar Word\dist\NisarOfficeStudio-3.0.1.appx` (about 225 MB). It is not signed, which is correct for the Store: Microsoft signs it. The build stops with a clear message if Step 4 has not been done yet.
 
 It is built for 64-bit Windows 10 version 1809 (build 17763) and later, including Windows 11. The logos come from `build/appx/` (re-create them with `node scripts/make-store-assets.js`).
 
@@ -95,7 +95,7 @@ Partner Center → your app → **Start your submission**. Fill in each section;
    - Website and support contact: your GitHub repository and its Issues page.
    - Product declarations: the app does not collect personal information; it has no in-app purchases.
 3. **Age ratings:** fill in the questionnaire as described in `store-listing.md`. The result should be the lowest rating.
-4. **Packages:** drag in `dist\NisarOfficeStudio-3.0.0.appx` and wait for "Validated".
+4. **Packages:** drag in `dist\NisarOfficeStudio-3.0.1.appx` and wait for "Validated".
 5. **Store listings → English (United States):** description, short description, search terms, release notes and screenshots from `docs/screenshots/`.
 6. **Submission options → Notes for certification:** paste this:
 

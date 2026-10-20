@@ -99,7 +99,9 @@ function placeCaret(node, atStart = true) {
   setRange(r);
 }
 function restoreSelection() {
-  if (document.activeElement !== editor) {
+  // a closed dialog gives focus back to the editor but can leave the selection inside the dialog
+  const sel = getSelection();
+  if (document.activeElement !== editor || !sel.rangeCount || !inEditor(sel.anchorNode)) {
     editor.focus({ preventScroll: true });
     if (state.savedRange && inEditor(state.savedRange.startContainer)) setRange(state.savedRange);
     else placeCaret(editor.lastElementChild || editor, false);

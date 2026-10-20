@@ -1,7 +1,7 @@
 {
   "name": "nisar-office-studio",
   "productName": "Nisar Office Studio",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A free, open-source, private word processor and PDF editor for Windows",
   "main": "main.js",
   "author": "Nisar",
@@ -15,7 +15,9 @@
     "dist:store": "node scripts/make-icon.js && node scripts/check-store-identity.js && electron-builder --win appx --publish never",
     "store-identity": "node scripts/set-store-identity.js",
     "notices": "node scripts/make-notices.js",
-    "github-name": "node scripts/set-github-name.js"
+    "github-name": "node scripts/set-github-name.js",
+    "crawl": "electron scripts/crawl.js",
+    "corpus": "electron scripts/corpus.js"
   },
   "dependencies": {
     "@tesseract.js-data/eng": "1.0.0",

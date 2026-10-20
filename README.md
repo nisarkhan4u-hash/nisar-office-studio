@@ -26,6 +26,7 @@ npm ci
 npm start            # run the app
 npm run smoke        # document editor tests
 npm run pdf-smoke    # PDF editor tests
+npm run crawl        # clicks every button, menu item and dialog in both editors
 npm run dist         # installer  -> dist\NisarOfficeStudio-Setup-<version>.exe
 npm run dist:store   # Microsoft Store package -> dist\NisarOfficeStudio-<version>.appx
 ```

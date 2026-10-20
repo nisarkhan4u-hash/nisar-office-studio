@@ -173,6 +173,24 @@ async function run(win) {
   ok('reopen .docx exactly', want === got, want === got ? '' : `differs at ${d}: want …${want.slice(d - 40, d + 60)}… got …${got.slice(d - 40, d + 60)}…`);
   ok('reopen keeps page setup', await js('state.page.orientation === "landscape" && state.page.size === "a4" && state.page.header === "My Header"'));
 
+  // an empty (0-byte) .docx opens as a blank document; a damaged one gives a clear message
+  const empty = path.join(tmp, 'empty.docx');
+  fs.writeFileSync(empty, '');
+  const emptyRes = await js(`api.openPath(${JSON.stringify(empty)}).then(d => d.error || d.html)`);
+  ok('open empty .docx', emptyRes === '<p><br></p>', emptyRes);
+  const broken = path.join(tmp, 'broken.docx');
+  fs.writeFileSync(broken, 'not a zip file');
+  const brokenRes = await js(`api.openPath(${JSON.stringify(broken)}).then(d => d.error || 'opened')`);
+  ok('damaged .docx: clear message', /damaged/.test(brokenRes), brokenRes);
+
+  // Insert Table… dialog: the table goes where the caret was before the dialog opened
+  await js(`state.dirty = false; editor.innerHTML = '<p id="tt">Before table</p>'; placeCaret(document.getElementById('tt'), false); true`);
+  await js(`document.querySelector('[data-menu="table"]').click(); document.querySelector('#menu-layer [data-custom]').click(); true`);
+  await wait(200);
+  await js(`document.querySelector('#modal[open] button[type=submit]').click(); true`);
+  await wait(200);
+  ok('Insert Table… dialog inserts a 3 × 3 table', await js(`(() => { const t = editor.querySelector('table'); return !!t && t.rows.length === 3 && t.rows[0].cells.length === 3 && editor.firstElementChild.id === 'tt'; })()`), await js('editor.innerHTML.slice(0, 120)'));
+
   // open a .docx made by another program (no embedded copy) -> converter path
   const HTMLtoDOCX = require('html-to-docx');
   const foreign = path.join(tmp, 'foreign.docx');
@@ -182,6 +200,7 @@ async function run(win) {
   await wait(400);
   const fh = await js('editor.innerHTML');
   ok('open foreign .docx', fh.includes('Foreign title') && /<strong>bold<\/strong>|<b>bold<\/b>/.test(fh) && /<li[ >]/.test(fh), fh.slice(0, 160));
+
   ok('foreign .docx: page setup read', await js('state.page.orientation === "landscape"'));
 
   // .html and .txt round trips

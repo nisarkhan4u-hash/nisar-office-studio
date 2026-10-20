@@ -253,7 +253,14 @@ async function readDocument(p) {
     if (!OPENABLE.includes(ext)) return { error: `Nisar Office Studio can't open "${name}". Supported files: .docx, .html, .txt` };
     const buf = await fsp.readFile(p);
     let out;
-    if (ext === '.docx') out = await docxToHtml(buf);
+    // an empty (0-byte) .docx opens as a blank document, as in Word
+    if (ext === '.docx' && buf.length === 0) out = { html: '<p><br></p>' };
+    else if (ext === '.docx') {
+      try { out = await docxToHtml(buf); } catch (err) {
+        if (/zip|end of data|central directory|signature/i.test(err.message || '')) return { error: `"${name}" is damaged or isn't a real Word document, so it can't be opened.` };
+        throw err;
+      }
+    }
     else if (ext === '.txt') out = { text: buf.toString('utf8').replace(/^﻿/, '') };
     else out = { html: buf.toString('utf8') };
     addRecent(p);

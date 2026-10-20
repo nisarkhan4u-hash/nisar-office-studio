@@ -172,6 +172,7 @@ async function openBytes(bytes, name, path) {
   setBusy(`Opening ${name}…`);
   try {
     const first = await loadPdfjs(bytes, name);
+    const previous = S.sources.slice();
     let restored = null;
     try { restored = await readEditLayer(first.doc); } catch (err) { console.warn('edit layer ignored', err); }
     textCache.clear();
@@ -212,6 +213,8 @@ async function openBytes(bytes, name, path) {
     fitWidth();
     updateStatus();
     resetHistory();
+    // free the document this window showed before
+    for (const src of previous) if (src.doc && !S.sources.includes(src)) src.doc.destroy().catch(() => {});
     updateTitle();
     updateToggles();
     for (const ent of S.entries) if (ent.ocr) injectOcrText(ent);
@@ -2550,8 +2553,8 @@ async function compressCopy() {
     const opt = await api.qpdf({ op: 'optimize', bytes });
     if (opt.bytes && opt.bytes.length < bytes.length) bytes = opt.bytes;
     const original = S.sources[0].bytes.length;
-    const mb = n => `${(n / 1048576).toFixed(n < 1048576 ? 2 : 1)} MB`;
-    if (bytes.length >= original * 0.98) toast(`This PDF is already compact (${mb(original)}).`);
+    const mb = n => (n < 1048576 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1048576).toFixed(1)} MB`);
+    if (bytes.length >= original * 0.98) { setBusy(null); await alertBox('Reduce File Size', `This PDF is already as small as it can be made (${mb(original)}). No copy was saved.`); return; }
     const res = await api.savePdf({ bytes, name: `${S.name.replace(/\.pdf$/i, '')} (smaller)`, title: 'Save Smaller Copy', copy: true }, true);
     if (res && res.path) toast(`Saved: ${mb(original)} → ${mb(bytes.length)}.`, () => api.showInFolder(res.path), 'Show in folder');
     else if (res && res.error) await alertBox("Couldn't save", res.error);
