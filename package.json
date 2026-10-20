@@ -11,8 +11,8 @@
     "icon": "node scripts/make-icon.js",
     "smoke": "electron scripts/smoke.js",
     "pdf-smoke": "electron scripts/pdf-smoke.js",
-    "dist": "node scripts/make-icon.js && electron-builder --win nsis",
-    "dist:store": "node scripts/make-icon.js && node scripts/check-store-identity.js && electron-builder --win appx",
+    "dist": "node scripts/make-icon.js && electron-builder --win nsis --publish never",
+    "dist:store": "node scripts/make-icon.js && node scripts/check-store-identity.js && electron-builder --win appx --publish never",
     "store-identity": "node scripts/set-store-identity.js",
     "notices": "node scripts/make-notices.js",
     "github-name": "node scripts/set-github-name.js"
