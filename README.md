@@ -14,7 +14,7 @@ A free, open-source word processor and PDF editor for Windows. It works offline:
 
 ## Install
 
-- **Microsoft Store:** search for "Nisar Office Studio" (once published).
+- **Microsoft Store (free, recommended):** https://apps.microsoft.com/detail/9MXVXPSM8CS8
 - **Installer:** download `NisarOfficeStudio-Setup-<version>.exe` from the [Releases](https://github.com/nisarkhan4u-hash/nisar-office-studio/releases) page. The installer is not code-signed, so Windows SmartScreen may warn you and Smart App Control may block it; the Microsoft Store version is signed by Microsoft and does not have this problem.
 
 ## Build from source
