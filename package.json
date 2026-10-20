@@ -83,9 +83,9 @@
       "uninstallerIcon": "build/icon.ico"
     },
     "appx": {
-      "identityName": "REPLACE-WITH-PARTNER-CENTER-PACKAGE-IDENTITY-NAME",
-      "publisher": "CN=REPLACE-WITH-PARTNER-CENTER-PUBLISHER-ID",
-      "publisherDisplayName": "Nisar",
+      "identityName": "NisarKhan.NisarOfficeStudio",
+      "publisher": "CN=82A9AD82-2853-4115-BDA0-A67EA4CC2D3A",
+      "publisherDisplayName": "Nisar Khan",
       "displayName": "Nisar Office Studio",
       "applicationId": "NisarOfficeStudio",
       "backgroundColor": "#1f5fbf",
