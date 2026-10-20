@@ -1,0 +1,123 @@
+{
+  "name": "nisar-office-studio",
+  "productName": "Nisar Office Studio",
+  "version": "3.0.0",
+  "description": "A free, open-source, private word processor and PDF editor for Windows",
+  "main": "main.js",
+  "author": "Nisar",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "icon": "node scripts/make-icon.js",
+    "smoke": "electron scripts/smoke.js",
+    "pdf-smoke": "electron scripts/pdf-smoke.js",
+    "dist": "node scripts/make-icon.js && electron-builder --win nsis",
+    "dist:store": "node scripts/make-icon.js && node scripts/check-store-identity.js && electron-builder --win appx",
+    "store-identity": "node scripts/set-store-identity.js",
+    "notices": "node scripts/make-notices.js",
+    "github-name": "node scripts/set-github-name.js"
+  },
+  "dependencies": {
+    "@tesseract.js-data/eng": "1.0.0",
+    "@xmldom/xmldom": "0.9.12",
+    "html-to-docx": "1.8.0",
+    "jszip": "3.10.2",
+    "mammoth": "1.13.0",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "5.7.284",
+    "tesseract.js": "7.0.0"
+  },
+  "devDependencies": {
+    "electron": "44.9.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.nisar.officestudio",
+    "productName": "Nisar Office Studio",
+    "copyright": "Copyright © 2026 Nisar",
+    "files": [
+      "main.js",
+      "preload.js",
+      "docx-import.js",
+      "docx-extras.js",
+      "src/**/*",
+      "build/icon.png",
+      "package.json",
+      "LICENSE",
+      "THIRD-PARTY-NOTICES.md"
+    ],
+    "extraResources": [
+      {
+        "from": "vendor/qpdf/bin",
+        "to": "qpdf"
+      },
+      {
+        "from": "vendor/qpdf/LICENSE-NOTICE.txt",
+        "to": "qpdf/LICENSE-NOTICE.txt"
+      }
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nisar Office Studio",
+      "artifactName": "NisarOfficeStudio-Setup-${version}.exe",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
+    },
+    "appx": {
+      "identityName": "REPLACE-WITH-PARTNER-CENTER-PACKAGE-IDENTITY-NAME",
+      "publisher": "CN=REPLACE-WITH-PARTNER-CENTER-PUBLISHER-ID",
+      "publisherDisplayName": "Nisar",
+      "displayName": "Nisar Office Studio",
+      "applicationId": "NisarOfficeStudio",
+      "backgroundColor": "#1f5fbf",
+      "languages": [
+        "en-US"
+      ],
+      "minVersion": "10.0.17763.0",
+      "maxVersionTested": "10.0.26100.0",
+      "artifactName": "NisarOfficeStudio-${version}.appx"
+    },
+    "fileAssociations": [
+      {
+        "ext": "docx",
+        "name": "Word Document",
+        "description": "Word Document",
+        "role": "Editor"
+      },
+      {
+        "ext": "pdf",
+        "name": "PDF Document",
+        "description": "PDF Document",
+        "role": "Editor",
+        "icon": "pdf"
+      }
+    ]
+  },
+  "homepage": "https://github.com/nisarkhan4u-hash/nisar-office-studio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nisarkhan4u-hash/nisar-office-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nisarkhan4u-hash/nisar-office-studio/issues"
+  }
+}

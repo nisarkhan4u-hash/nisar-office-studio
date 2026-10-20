@@ -1,0 +1,53 @@
+# Builds the Windows installer (and the Microsoft Store package once the Store identity is set)
+# on GitHub's free Windows machines. Public repositories get these minutes for free.
+# Runs when you push a tag like v3.0.1, or by hand from the Actions tab.
+name: Windows build
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the installer
+        run: npm run dist
+
+      - name: Build the Microsoft Store package
+        shell: pwsh
+        run: |
+          $appx = (Get-Content package.json -Raw | ConvertFrom-Json).build.appx
+          if ($appx.identityName -like 'REPLACE-WITH*') {
+            Write-Host 'Store identity not set in package.json yet; skipping the Store package.'
+          } else {
+            npm run dist:store
+          }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nisar-office-studio-windows
+          path: |
+            dist/*.exe
+            dist/*.appx
+          if-no-files-found: error
+
+      - name: Attach the installer to the GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/NisarOfficeStudio-Setup-*.exe

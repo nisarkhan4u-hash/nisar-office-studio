@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' data: blob:; object-src 'none'; base-uri 'none'">
+<title>PDF - Nisar Office Studio</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="pdf.css">
+</head>
+<body class="pdf-mode" data-tool="select">
+<div id="app">
+  <header id="ribbon">
+    <div id="tabbar">
+      <div id="qat">
+        <button class="qbtn" data-cmd="save" data-icon="save" title="Save (Ctrl+S)"></button>
+        <button class="qbtn" data-cmd="undo" data-icon="undo" title="Undo (Ctrl+Z)"></button>
+        <button class="qbtn" data-cmd="redo" data-icon="redo" title="Redo (Ctrl+Y)"></button>
+      </div>
+      <button class="tab file-tab pdf-file-tab" data-cmd="backstage">File</button>
+      <button class="tab active" data-tab="home">Home</button>
+      <button class="tab" data-tab="comment">Comment</button>
+      <button class="tab" data-tab="edit">Edit</button>
+      <button class="tab" data-tab="pages">Pages</button>
+      <button class="tab" data-tab="protect">Protect</button>
+      <div class="spacer"></div>
+      <div id="docname"></div>
+      <button class="qbtn" data-cmd="collapseRibbon" data-icon="chevronUp" title="Collapse the ribbon (Ctrl+F1)"></button>
+    </div>
+
+    <div id="panels">
+      <!-- HOME -->
+      <div class="panel active" data-panel="home">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="open" data-icon="open" title="Open a PDF (Ctrl+O)"><span>Open</span></button>
+            <button class="big" data-cmd="save" data-icon="save" title="Save (Ctrl+S)"><span>Save</span></button>
+            <button class="big" data-cmd="print" data-icon="print" title="Print (Ctrl+P)"><span>Print</span></button>
+          </div>
+          <div class="glabel">File</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="select" data-icon="cursor" title="Select text and objects (V)"><span>Select</span></button>
+            <button class="big" data-tool="hand" data-icon="hand" title="Hand: drag to scroll (H)"><span>Hand</span></button>
+          </div>
+          <div class="glabel">Tools</div>
+        </div>
+        <div class="group">
+          <div class="gbody col">
+            <div class="row">
+              <button class="ico" data-cmd="zoomOut" title="Zoom Out (Ctrl+-)">−</button>
+              <div class="combo"><input id="zoom-input" title="Zoom" value="100%" spellcheck="false"><button class="tiny" data-menu="zoom" data-icon="chevron" title="Zoom levels"></button></div>
+              <button class="ico" data-cmd="zoomIn" title="Zoom In (Ctrl+=)">+</button>
+            </div>
+            <div class="row">
+              <button class="sm" data-cmd="fitWidth" data-icon="pagewidth" title="Fit the page width (Ctrl+0)">Fit Width</button>
+              <button class="sm" data-cmd="fitPage" data-icon="onepage" title="Fit one whole page">Fit Page</button>
+            </div>
+          </div>
+          <div class="glabel">Zoom</div>
+        </div>
+        <div class="group">
+          <div class="gbody col">
+            <button class="sm" data-cmd="find" data-icon="find" title="Find text (Ctrl+F)">Find</button>
+            <button class="sm" data-cmd="goto" data-icon="goto" title="Go to page">Go to Page</button>
+            <button class="sm" data-cmd="thumbs" data-icon="thumbs" title="Show or hide page thumbnails">Thumbnails</button>
+          </div>
+          <div class="glabel">Navigate</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="toWord" data-icon="doc" title="Convert this PDF into an editable document"><span>To Word</span></button>
+            <button class="big dd" data-menu="images" data-icon="image" title="Save pages as pictures"><span>Images</span></button>
+          </div>
+          <div class="glabel">Export</div>
+        </div>
+      </div>
+
+      <!-- COMMENT -->
+      <div class="panel" data-panel="comment">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="select" data-icon="cursor" title="Select (V)"><span>Select</span></button>
+            <button class="big" data-tool="hand" data-icon="hand" title="Hand (H)"><span>Hand</span></button>
+          </div>
+          <div class="glabel">Tools</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="highlight" data-icon="highlight" title="Highlight: select text, or drag a box"><span>Highlight</span></button>
+            <button class="big" data-tool="underline" data-icon="underlineTool" title="Underline text"><span>Underline</span></button>
+            <button class="big" data-tool="strike" data-icon="strikeTool" title="Strike through text"><span>Strike</span></button>
+          </div>
+          <div class="glabel">Text Markup</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="note" data-icon="note" title="Sticky note: click where the comment belongs"><span>Note</span></button>
+          </div>
+          <div class="glabel">Comment</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="ink" data-icon="pen" title="Draw freehand"><span>Draw</span></button>
+            <div class="col">
+              <button class="sm" data-tool="rect" data-icon="rectTool">Rectangle</button>
+              <button class="sm" data-tool="ellipse" data-icon="ellipseTool">Ellipse</button>
+              <button class="sm" data-tool="line" data-icon="lineTool">Line</button>
+            </div>
+            <div class="col">
+              <button class="sm" data-tool="arrow" data-icon="arrowTool">Arrow</button>
+            </div>
+          </div>
+          <div class="glabel">Drawing</div>
+        </div>
+        <div class="group">
+          <div class="gbody col">
+            <div class="split">
+              <button class="sm" data-cmd="applyColor" title="Colour for drawings and markup"><span class="swatch" id="color-swatch"></span>Colour</button>
+              <button class="tiny" data-menu="color" data-icon="chevron" title="Colours"></button>
+            </div>
+            <button class="sm dd" data-menu="width" data-icon="widthTool" title="Line thickness">Thickness</button>
+            <button class="sm dd" data-menu="opacity" data-icon="opacityTool" title="Opacity">Opacity</button>
+          </div>
+          <div class="glabel">Style</div>
+        </div>
+      </div>
+
+      <!-- EDIT -->
+      <div class="panel" data-panel="edit">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="text" data-icon="addText" title="Add text: click where it should go"><span>Add Text</span></button>
+            <button class="big" data-tool="edittext" data-icon="editText" title="Edit existing text: click a line of text in the PDF"><span>Edit Text</span></button>
+          </div>
+          <div class="glabel">Text</div>
+        </div>
+        <div class="group">
+          <div class="gbody col">
+            <div class="row">
+              <select id="font-select" title="Font">
+                <option value="Helvetica">Helvetica (Arial)</option>
+                <option value="Times">Times New Roman</option>
+                <option value="Courier">Courier New</option>
+              </select>
+              <div class="combo"><input id="size-input" title="Font Size" value="12" spellcheck="false"><button class="tiny" data-menu="sizes" data-icon="chevron" title="Font sizes"></button></div>
+            </div>
+            <div class="row">
+              <button class="ico" data-cmd="bold" title="Bold"><b class="glyph">B</b></button>
+              <button class="ico" data-cmd="italic" title="Italic"><i class="glyph serif">I</i></button>
+              <span class="sep"></span>
+              <button class="ico" data-cmd="alignLeft" data-icon="alignLeft" title="Align Left"></button>
+              <button class="ico" data-cmd="alignCenter" data-icon="alignCenter" title="Center"></button>
+              <button class="ico" data-cmd="alignRight" data-icon="alignRight" title="Align Right"></button>
+              <span class="sep"></span>
+              <div class="split">
+                <button class="ico" data-cmd="applyTextColor" title="Text Colour"><span class="glyph">A</span><span class="cbar" id="text-color-bar"></span></button>
+                <button class="tiny" data-menu="textColor" data-icon="chevron" title="Text colours"></button>
+              </div>
+            </div>
+          </div>
+          <div class="glabel">Font</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="image" data-icon="image" title="Add a picture"><span>Image</span></button>
+            <button class="big" data-cmd="signature" data-icon="sign" title="Sign: draw or type your signature"><span>Sign</span></button>
+            <button class="big dd" data-menu="stamps" data-icon="stamp" title="Add a stamp"><span>Stamp</span></button>
+          </div>
+          <div class="glabel">Insert</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="headerFooter" data-icon="headerfooter" title="Header & footer, page numbers and Bates numbering on every page"><span>Header &amp;<br>Footer</span></button>
+            <button class="big" data-cmd="watermark" data-icon="watermark" title="Add a watermark such as DRAFT or CONFIDENTIAL to every page"><span>Watermark</span></button>
+          </div>
+          <div class="glabel">Page Content</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="whiteout" data-icon="whiteout" title="Whiteout: drag over anything to hide it under white"><span>Whiteout</span></button>
+            <button class="big" data-tool="redact" data-icon="redact" title="Redact: drag over anything to remove it permanently when saved"><span>Redact</span></button>
+          </div>
+          <div class="glabel">Hide Content</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <div class="col">
+              <button class="sm" data-tool="fieldText" data-icon="fieldText" title="Draw a fillable text box">Text Field</button>
+              <button class="sm" data-tool="fieldCheck" data-icon="fieldCheck" title="Draw a check box">Check Box</button>
+              <button class="sm" data-tool="fieldDropdown" data-icon="fieldDropdown" title="Draw a drop-down list">Drop-down</button>
+            </div>
+            <div class="col">
+              <button class="sm" data-cmd="clearForm" data-icon="clear" title="Clear every form field">Clear Form</button>
+              <button class="sm" data-cmd="flattenForms" data-icon="flatten" title="When saving, turn form fields into plain text that can't be changed">Flatten on Save</button>
+            </div>
+          </div>
+          <div class="glabel">Prepare Form</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big dd" data-menu="ocr" data-icon="ocr" title="Recognize Text (OCR): make scanned pages searchable and selectable"><span>Recognize<br>Text</span></button>
+          </div>
+          <div class="glabel">Scan &amp; OCR</div>
+        </div>
+      </div>
+
+      <!-- PAGES -->
+      <div class="panel" data-panel="pages">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="insertBlank" data-icon="new" title="Insert a blank page after this one"><span>Blank<br>Page</span></button>
+            <button class="big" data-cmd="insertPdf" data-icon="merge" title="Insert pages from another PDF (combine files)"><span>From<br>PDF</span></button>
+            <button class="big" data-cmd="insertImagePage" data-icon="image" title="Insert a picture as a new page"><span>Image<br>Page</span></button>
+          </div>
+          <div class="glabel">Insert</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="rotateLeft" data-icon="rotateLeft" title="Rotate left"><span>Rotate<br>Left</span></button>
+            <button class="big" data-cmd="rotateRight" data-icon="rotateRight" title="Rotate right"><span>Rotate<br>Right</span></button>
+            <div class="col">
+              <button class="sm" data-cmd="moveUp" data-icon="up">Move Up</button>
+              <button class="sm" data-cmd="moveDown" data-icon="down">Move Down</button>
+              <button class="sm" data-cmd="duplicate" data-icon="copy">Duplicate</button>
+            </div>
+          </div>
+          <div class="glabel">Arrange</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="deletePages" data-icon="trash" title="Delete the selected pages"><span>Delete</span></button>
+            <button class="big" data-cmd="extract" data-icon="extract" title="Save the selected pages as a new PDF"><span>Extract</span></button>
+            <button class="big" data-cmd="split" data-icon="split" title="Split this PDF into several files"><span>Split</span></button>
+            <button class="big" data-cmd="crop" data-icon="crop" title="Crop the margins of the selected pages"><span>Crop</span></button>
+          </div>
+          <div class="glabel">Organise</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="combine" data-icon="merge" title="Combine several PDF files into this one"><span>Combine<br>Files</span></button>
+            <button class="big" data-cmd="imagesToPdf" data-icon="image" title="Add pictures as new pages"><span>Pictures<br>to Pages</span></button>
+          </div>
+          <div class="glabel">Combine</div>
+        </div>
+        <div class="group hint-group">
+          <div class="gbody">
+            <p class="pages-hint">Select pages in the thumbnail panel on the left (Ctrl+click or Shift+click for several). Drag thumbnails to reorder pages.</p>
+          </div>
+          <div class="glabel">Tip</div>
+        </div>
+      </div>
+
+      <!-- PROTECT -->
+      <div class="panel" data-panel="protect">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="protect" data-icon="lock" title="Require a password to open the PDF, or limit printing, copying and editing (AES-256)"><span>Password<br>Protect</span></button>
+            <button class="big" data-cmd="unprotect" data-icon="unlock" title="Remove the password when saving"><span>Remove<br>Password</span></button>
+          </div>
+          <div class="glabel">Encrypt</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-tool="redact" data-icon="redact" title="Drag over content to redact it"><span>Redact<br>Area</span></button>
+            <button class="big" data-cmd="findRedact" data-icon="findRedact" title="Find words or numbers and redact every match"><span>Find &amp;<br>Redact</span></button>
+            <button class="big" data-cmd="sanitize" data-icon="sanitize" title="Remove hidden information: metadata, attachments and scripts"><span>Remove<br>Hidden Info</span></button>
+          </div>
+          <div class="glabel">Redact</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="compress" data-icon="compress" title="Save a smaller copy of this PDF"><span>Reduce<br>File Size</span></button>
+          </div>
+          <div class="glabel">Optimize</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="pdf-main">
+    <aside id="thumbs">
+      <div class="thumbs-head">
+        <div class="side-tabs"><button class="on" data-side="pages">Pages</button><button data-side="bookmarks">Bookmarks</button><button data-side="comments">Comments</button></div>
+        <button class="ico" data-cmd="thumbs" data-icon="close" title="Hide the side panel"></button>
+      </div>
+      <div id="thumb-list" tabindex="0"></div>
+      <div id="bookmark-list" class="side-list" hidden></div>
+      <div id="comment-list" class="side-list" hidden></div>
+    </aside>
+    <div id="pdf-workspace">
+      <div id="pdf-scroller"><div id="pdf-pages"></div></div>
+      <div id="empty-state" hidden>
+        <div class="es-card">
+          <div class="es-icon">PDF</div>
+          <h1>Open or create a PDF</h1>
+          <p>View, fill in, sign, comment on, edit and reorganise PDF files. Everything stays on this PC.</p>
+          <div class="es-actions">
+            <button class="btn primary" data-cmd="open">Open a PDF…</button>
+            <button class="btn" data-cmd="newBlank">Create a Blank PDF</button>
+          </div>
+          <p class="es-drop">or drop a PDF file here</p>
+        </div>
+      </div>
+      <div id="findbar" hidden>
+        <div class="frow">
+          <input id="find-input" placeholder="Find in PDF" spellcheck="false">
+          <span id="find-count"></span>
+          <button class="ico" data-find="prev" title="Previous (Shift+Enter)" data-icon="up"></button>
+          <button class="ico" data-find="next" title="Next (Enter)" data-icon="down"></button>
+          <label class="chk"><input type="checkbox" id="find-case"> Match case</label>
+          <button class="ico" data-find="close" title="Close (Esc)" data-icon="close"></button>
+        </div>
+      </div>
+      <div id="objbar" hidden></div>
+      <div id="notepop" hidden><textarea id="note-text" placeholder="Type your comment" spellcheck="true"></textarea><div class="np-actions"><button class="btn" data-np="delete">Delete</button><button class="btn primary" data-np="done">Done</button></div></div>
+    </div>
+  </main>
+
+  <footer id="statusbar">
+    <button class="st" id="st-page" data-cmd="goto" title="Go to page">Page 0 of 0</button>
+    <span class="st" id="st-tool"></span>
+    <span class="st" id="st-saved"></span>
+    <div class="spacer"></div>
+    <button class="st-ico" data-cmd="zoomOut" title="Zoom Out">−</button>
+    <input type="range" id="zoom-range" min="10" max="400" step="5" value="100" title="Zoom">
+    <button class="st-ico" data-cmd="zoomIn" title="Zoom In">+</button>
+    <button class="st" id="st-zoom" data-cmd="fitWidth" title="Fit width">100%</button>
+  </footer>
+</div>
+
+<div id="backstage" hidden>
+  <nav id="bs-nav">
+    <button class="bs-back" data-cmd="closeBackstage" data-icon="back" title="Back (Esc)"></button>
+    <button class="bs-item active" data-bs="home" data-icon="home">Home</button>
+    <button class="bs-item" data-cmd="open" data-icon="open">Open</button>
+    <hr>
+    <button class="bs-item" data-cmd="save" data-icon="save">Save</button>
+    <button class="bs-item" data-cmd="saveAs" data-icon="saveas">Save As</button>
+    <button class="bs-item" data-cmd="print" data-icon="print">Print</button>
+    <button class="bs-item" data-cmd="toWord" data-icon="doc">Export to Word</button>
+    <hr>
+    <button class="bs-item" data-bs="about" data-icon="info">About &amp; Shortcuts</button>
+    <button class="bs-item" data-cmd="closeDoc" data-icon="close">Close</button>
+  </nav>
+  <section class="bs-pane active" data-pane="home">
+    <h1 id="bs-greeting">Good morning</h1>
+    <div class="templates">
+      <button class="tpl" data-cmd="newDocument"><div class="thumb"><div class="t1">Document</div><div class="ln"></div><div class="ln"></div><div class="ln" style="width:70%"></div></div>New document</button>
+      <button class="tpl" data-cmd="newBlank"><div class="thumb"></div>Blank PDF</button>
+      <button class="tpl" data-cmd="open"><div class="thumb pdf-thumb"><span>PDF</span></div>Open a PDF</button>
+    </div>
+    <h2>Recent</h2>
+    <ul id="recent" class="recent"></ul>
+  </section>
+  <section class="bs-pane" data-pane="about">
+    <h1>Nisar Office Studio · PDF</h1>
+    <p class="lead">View, fill in, sign, comment on, edit and reorganise PDF files. Everything stays on this PC.</p>
+    <p>Comments, drawings, text, pictures and signatures you add are written into the PDF when you save, so they show up in every PDF reader. Nisar Office Studio also keeps a private copy of your edits inside the file, so when you reopen it here you can still move, change or delete them.</p>
+    <p><b>Whiteout</b> covers content with white, but the text underneath can still be copied out of the file. <b>Redact</b> removes it for good: when you save, redacted pages are turned into images so the hidden text no longer exists.</p>
+    <h2>Keyboard shortcuts</h2>
+    <div class="shortcuts" id="shortcuts"></div>
+  </section>
+</div>
+
+<div id="menu-layer"></div>
+<dialog id="modal"></dialog>
+<div id="toast" hidden></div>
+<script src="../node_modules/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="common.js"></script>
+<script type="module" src="pdf-app.js"></script>
+</body>
+</html>

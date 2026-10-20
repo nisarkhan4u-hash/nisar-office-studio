@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-store/
+# signing secrets: never commit
+keystore.properties
+*.jks
+*.keystore
+*.p12
+*.p8
+*.pfx
+*.mobileprovision
+# the phone version is not part of the Windows release
+mobile/
+*.log

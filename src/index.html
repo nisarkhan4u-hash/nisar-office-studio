@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https: http:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; object-src 'none'; base-uri 'none'">
+<title>Nisar Office Studio</title>
+<link rel="stylesheet" href="styles.css">
+<style id="page-rule"></style>
+</head>
+<body>
+<div id="app">
+  <header id="ribbon">
+    <div id="tabbar">
+      <div id="qat">
+        <button class="qbtn" data-cmd="save" data-icon="save" title="Save (Ctrl+S)"></button>
+        <button class="qbtn" data-cmd="undo" data-icon="undo" title="Undo (Ctrl+Z)"></button>
+        <button class="qbtn" data-cmd="redo" data-icon="redo" title="Redo (Ctrl+Y)"></button>
+      </div>
+      <button class="tab file-tab" data-cmd="backstage">File</button>
+      <button class="tab active" data-tab="home">Home</button>
+      <button class="tab" data-tab="insert">Insert</button>
+      <button class="tab" data-tab="layout">Layout</button>
+      <button class="tab" data-tab="references">References</button>
+      <button class="tab" data-tab="review">Review</button>
+      <button class="tab" data-tab="view">View</button>
+      <div class="spacer"></div>
+      <div id="docname" title=""></div>
+      <button class="qbtn" data-cmd="collapseRibbon" data-icon="chevronUp" title="Collapse the ribbon (Ctrl+F1)"></button>
+    </div>
+
+    <div id="panels">
+      <!-- HOME -->
+      <div class="panel active" data-panel="home">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="paste" data-icon="paste" title="Paste (Ctrl+V)"><span>Paste</span></button>
+            <div class="col">
+              <button class="sm" data-cmd="cut" data-icon="cut" title="Cut (Ctrl+X)">Cut</button>
+              <button class="sm" data-cmd="copy" data-icon="copy" title="Copy (Ctrl+C)">Copy</button>
+              <button class="sm" data-cmd="painter" data-icon="brush" title="Format Painter: select text, click this, then select the text to format">Format Painter</button>
+            </div>
+          </div>
+          <div class="glabel">Clipboard</div>
+        </div>
+
+        <div class="group">
+          <div class="gbody col">
+            <div class="row">
+              <select id="font-family" title="Font"></select>
+              <div class="combo">
+                <input id="font-size" title="Font Size" value="11" spellcheck="false" autocomplete="off">
+                <button class="tiny" data-menu="sizes" data-icon="chevron" title="Font sizes"></button>
+              </div>
+              <button class="ico" data-cmd="grow" title="Increase Font Size (Ctrl+])"><span class="glyph">A<sup>▴</sup></span></button>
+              <button class="ico" data-cmd="shrink" title="Decrease Font Size (Ctrl+[)"><span class="glyph small">A<sup>▾</sup></span></button>
+              <button class="ico" data-menu="case" title="Change Case"><span class="glyph">Aa</span></button>
+              <button class="ico" data-cmd="clear" data-icon="clear" title="Clear All Formatting"></button>
+            </div>
+            <div class="row">
+              <button class="ico" data-cmd="bold" title="Bold (Ctrl+B)"><b class="glyph">B</b></button>
+              <button class="ico" data-cmd="italic" title="Italic (Ctrl+I)"><i class="glyph serif">I</i></button>
+              <button class="ico" data-cmd="underline" title="Underline (Ctrl+U)"><u class="glyph">U</u></button>
+              <button class="ico" data-cmd="strike" title="Strikethrough"><s class="glyph">ab</s></button>
+              <button class="ico" data-cmd="sub" title="Subscript (Ctrl+=)"><span class="glyph">x<sub>2</sub></span></button>
+              <button class="ico" data-cmd="sup" title="Superscript (Ctrl+Shift+=)"><span class="glyph">x<sup>2</sup></span></button>
+              <span class="sep"></span>
+              <div class="split">
+                <button class="ico" data-cmd="hilite" data-icon="highlight" title="Text Highlight Color"><span class="cbar" id="hilite-bar"></span></button>
+                <button class="tiny" data-menu="hilite" data-icon="chevron" title="Highlight colors"></button>
+              </div>
+              <div class="split">
+                <button class="ico" data-cmd="fore" title="Font Color"><span class="glyph">A</span><span class="cbar" id="fore-bar"></span></button>
+                <button class="tiny" data-menu="fore" data-icon="chevron" title="Font colors"></button>
+              </div>
+            </div>
+          </div>
+          <div class="glabel">Font<button class="launcher" data-cmd="fontDialog" title="More font settings (Ctrl+D)"></button></div>
+        </div>
+
+        <div class="group">
+          <div class="gbody col">
+            <div class="row">
+              <div class="split">
+                <button class="ico" data-cmd="bullets" data-icon="bullets" title="Bullets (Ctrl+Shift+L)"></button>
+                <button class="tiny" data-menu="bulletStyle" data-icon="chevron" title="Bullet styles"></button>
+              </div>
+              <div class="split">
+                <button class="ico" data-cmd="numbers" data-icon="numbers" title="Numbering"></button>
+                <button class="tiny" data-menu="numberStyle" data-icon="chevron" title="Numbering styles"></button>
+              </div>
+              <button class="ico" data-cmd="outdent" data-icon="outdent" title="Decrease Indent (Ctrl+Shift+M)"></button>
+              <button class="ico" data-cmd="indent" data-icon="indent" title="Increase Indent (Ctrl+M)"></button>
+            </div>
+            <div class="row">
+              <button class="ico" data-cmd="left" data-icon="alignLeft" title="Align Left (Ctrl+L)"></button>
+              <button class="ico" data-cmd="center" data-icon="alignCenter" title="Center (Ctrl+E)"></button>
+              <button class="ico" data-cmd="right" data-icon="alignRight" title="Align Right (Ctrl+R)"></button>
+              <button class="ico" data-cmd="justify" data-icon="justify" title="Justify (Ctrl+J)"></button>
+              <span class="sep"></span>
+              <button class="ico dd" data-menu="spacing" data-icon="spacing" title="Line and Paragraph Spacing"></button>
+              <div class="split">
+                <button class="ico" data-cmd="shade" data-icon="shade" title="Paragraph Shading"><span class="cbar" id="shade-bar"></span></button>
+                <button class="tiny" data-menu="shade" data-icon="chevron" title="Shading colors"></button>
+              </div>
+            </div>
+          </div>
+          <div class="glabel">Paragraph<button class="launcher" data-cmd="paragraphDialog" title="Indents and spacing"></button></div>
+        </div>
+
+        <div class="group grow">
+          <div class="gbody">
+            <div class="styles" id="styles-gallery">
+              <button class="style-card" data-cmd="style" data-arg="normal" title="Normal (Ctrl+Shift+N)"><span class="pv pv-normal">AaBbCc</span><span class="nm">Normal</span></button>
+              <button class="style-card" data-cmd="style" data-arg="title" title="Title"><span class="pv pv-title">AaBb</span><span class="nm">Title</span></button>
+              <button class="style-card" data-cmd="style" data-arg="h1" title="Heading 1 (Ctrl+Alt+1)"><span class="pv pv-h1">AaBbC</span><span class="nm">Heading 1</span></button>
+              <button class="style-card" data-cmd="style" data-arg="h2" title="Heading 2 (Ctrl+Alt+2)"><span class="pv pv-h2">AaBbCc</span><span class="nm">Heading 2</span></button>
+              <button class="style-card" data-cmd="style" data-arg="h3" title="Heading 3 (Ctrl+Alt+3)"><span class="pv pv-h3">AaBbCc</span><span class="nm">Heading 3</span></button>
+              <button class="style-card" data-cmd="style" data-arg="quote" title="Quote"><span class="pv pv-quote">AaBbCc</span><span class="nm">Quote</span></button>
+              <button class="style-card" data-cmd="style" data-arg="code" title="Code"><span class="pv pv-code">AaBb</span><span class="nm">Code</span></button>
+            </div>
+          </div>
+          <div class="glabel">Styles</div>
+        </div>
+
+        <div class="group">
+          <div class="gbody col">
+            <button class="sm" data-cmd="find" data-icon="find" title="Find (Ctrl+F)">Find</button>
+            <button class="sm" data-cmd="replace" data-icon="replace" title="Replace (Ctrl+H)">Replace</button>
+            <button class="sm" data-cmd="selectAll" data-icon="selectAll" title="Select All (Ctrl+A)">Select All</button>
+          </div>
+          <div class="glabel">Editing</div>
+        </div>
+      </div>
+
+      <!-- INSERT -->
+      <div class="panel" data-panel="insert">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="pageBreak" data-icon="pagebreak" title="Page Break (Ctrl+Enter)"><span>Page<br>Break</span></button>
+          </div>
+          <div class="glabel">Pages</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big dd" data-menu="table" data-icon="table" title="Insert a table"><span>Table</span></button>
+          </div>
+          <div class="glabel">Tables</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="picture" data-icon="image" title="Insert a picture from this PC"><span>Pictures</span></button>
+            <button class="big" data-cmd="hr" data-icon="hr" title="Horizontal Line"><span>Line</span></button>
+          </div>
+          <div class="glabel">Illustrations</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="link" data-icon="link" title="Link to a web page, e-mail address or a heading in this document (Ctrl+K)"><span>Link</span></button>
+          </div>
+          <div class="glabel">Links</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="newComment" data-icon="comment" title="Add a comment about the selected text (Ctrl+Alt+M)"><span>Comment</span></button>
+          </div>
+          <div class="glabel">Comments</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="headerFooter" data-icon="headerfooter" title="Header, footer and page numbers"><span>Header &amp;<br>Footer</span></button>
+            <button class="big" data-cmd="pageNumbers" data-icon="pagenum" title="Add or remove page numbers"><span>Page<br>Number</span></button>
+          </div>
+          <div class="glabel">Header &amp; Footer</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big dd" data-menu="date" data-icon="date" title="Insert the current date or time"><span>Date &amp;<br>Time</span></button>
+            <button class="big dd" data-menu="symbols" title="Insert a symbol"><span class="bigglyph">Ω</span><span>Symbol</span></button>
+          </div>
+          <div class="glabel">Text</div>
+        </div>
+      </div>
+
+      <!-- LAYOUT -->
+      <div class="panel" data-panel="layout">
+        <div class="group">
+          <div class="gbody">
+            <button class="big dd" data-menu="margins" data-icon="margins" title="Margins"><span>Margins</span></button>
+            <button class="big dd" data-menu="orientation" data-icon="orientation" title="Orientation"><span>Orientation</span></button>
+            <button class="big dd" data-menu="size" data-icon="size" title="Paper size"><span>Size</span></button>
+            <button class="big dd" data-menu="columns" data-icon="columns" title="Columns"><span>Columns</span></button>
+          </div>
+          <div class="glabel">Page Setup</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="watermark" data-icon="watermark" title="Watermark: faint text such as DRAFT or CONFIDENTIAL behind every page"><span>Watermark</span></button>
+          </div>
+          <div class="glabel">Page Background</div>
+        </div>
+        <div class="group">
+          <div class="gbody col">
+            <button class="sm" data-cmd="indent" data-icon="indent" title="Increase Indent">Increase Indent</button>
+            <button class="sm" data-cmd="outdent" data-icon="outdent" title="Decrease Indent">Decrease Indent</button>
+            <button class="sm" data-cmd="paragraphDialog" data-icon="spacing" title="Indents, spacing and line spacing">Paragraph…</button>
+          </div>
+          <div class="glabel">Paragraph</div>
+        </div>
+        <div class="group table-tools disabled">
+          <div class="gbody">
+            <div class="col">
+              <button class="sm" data-cmd="rowAbove" data-icon="rowAbove">Insert Above</button>
+              <button class="sm" data-cmd="rowBelow" data-icon="rowBelow">Insert Below</button>
+              <button class="sm" data-cmd="headerRow" data-icon="table">Header Row</button>
+            </div>
+            <div class="col">
+              <button class="sm" data-cmd="colLeft" data-icon="colLeft">Insert Left</button>
+              <button class="sm" data-cmd="colRight" data-icon="colRight">Insert Right</button>
+              <button class="sm" data-cmd="delRow" data-icon="close">Delete Row</button>
+            </div>
+            <div class="col">
+              <button class="sm" data-cmd="delCol" data-icon="close">Delete Column</button>
+              <button class="sm" data-cmd="delTable" data-icon="trash">Delete Table</button>
+            </div>
+          </div>
+          <div class="glabel">Table (click inside a table)</div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div class="panel" data-panel="references">
+        <div class="group">
+          <div class="gbody">
+            <button class="big dd" data-menu="toc" data-icon="toc" title="Table of Contents built from your headings"><span>Table of<br>Contents</span></button>
+            <div class="col">
+              <button class="sm" data-cmd="updateToc" data-icon="refresh" title="Update the table of contents and its page numbers">Update Table</button>
+            </div>
+          </div>
+          <div class="glabel">Table of Contents</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="footnote" data-icon="footnote" title="Insert a footnote (Ctrl+Alt+F). Notes are listed at the end of the document."><span>Insert<br>Footnote</span></button>
+            <div class="col">
+              <button class="sm" data-cmd="nextFootnote" data-icon="down" title="Go to the next footnote reference">Next Footnote</button>
+              <button class="sm" data-cmd="showNotes" data-icon="footnote" title="Jump between a footnote reference and its note">Show Notes</button>
+            </div>
+          </div>
+          <div class="glabel">Footnotes</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="navPane" data-icon="navpane" title="Navigation Pane: jump to any heading"><span>Navigation<br>Pane</span></button>
+          </div>
+          <div class="glabel">Navigate</div>
+        </div>
+      </div>
+
+      <!-- REVIEW -->
+      <div class="panel" data-panel="review">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="spell" data-icon="spell" title="Turn spell checking on or off"><span>Spelling</span></button>
+            <button class="big" data-cmd="wordCount" data-icon="count" title="Word Count"><span>Word<br>Count</span></button>
+          </div>
+          <div class="glabel">Proofing</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="newComment" data-icon="comment" title="New Comment (Ctrl+Alt+M)"><span>New<br>Comment</span></button>
+            <div class="col">
+              <button class="sm" data-cmd="prevComment" data-icon="up">Previous</button>
+              <button class="sm" data-cmd="nextComment" data-icon="down">Next</button>
+              <button class="sm" data-cmd="showComments" data-icon="comment">Show Comments</button>
+            </div>
+            <div class="col">
+              <button class="sm" data-cmd="deleteComment" data-icon="trash">Delete</button>
+              <button class="sm" data-cmd="deleteAllComments" data-icon="trash">Delete All</button>
+            </div>
+          </div>
+          <div class="glabel">Comments</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="trackChanges" data-icon="track" title="Track Changes: mark every insertion and deletion (Ctrl+Shift+E)"><span>Track<br>Changes</span></button>
+            <div class="col">
+              <button class="sm dd" data-menu="markup" data-icon="markup" title="How changes are shown">Markup</button>
+            </div>
+          </div>
+          <div class="glabel">Tracking</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big dd" data-menu="accept" data-icon="accept" title="Accept changes"><span>Accept</span></button>
+            <button class="big dd" data-menu="reject" data-icon="reject" title="Reject changes"><span>Reject</span></button>
+            <div class="col">
+              <button class="sm" data-cmd="prevChange" data-icon="up">Previous</button>
+              <button class="sm" data-cmd="nextChange" data-icon="down">Next</button>
+            </div>
+          </div>
+          <div class="glabel">Changes</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="speak" data-icon="speak" title="Read the selection (or the whole document) aloud"><span>Read<br>Aloud</span></button>
+            <button class="big" data-cmd="stopSpeak" data-icon="stop" title="Stop reading"><span>Stop</span></button>
+          </div>
+          <div class="glabel">Speech</div>
+        </div>
+      </div>
+
+      <!-- VIEW -->
+      <div class="panel" data-panel="view">
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="printLayout" data-icon="printlayout" title="Print Layout"><span>Print<br>Layout</span></button>
+            <button class="big" data-cmd="webLayout" data-icon="web" title="Web Layout: text fills the window"><span>Web<br>Layout</span></button>
+            <button class="big" data-cmd="focus" data-icon="focus" title="Focus mode: hide everything but your writing (Esc to exit)"><span>Focus</span></button>
+            <button class="big" data-cmd="printPreview" data-icon="preview" title="See exactly how the printed pages will look"><span>Print<br>Preview</span></button>
+          </div>
+          <div class="glabel">Views</div>
+        </div>
+        <div class="group">
+          <div class="gbody col">
+            <button class="sm" data-cmd="navPane" data-icon="navpane">Navigation Pane</button>
+            <button class="sm" data-cmd="boundaries" data-icon="boundaries">Page Boundaries</button>
+            <button class="sm" data-cmd="dark" data-icon="moon">Dark Mode</button>
+          </div>
+          <div class="glabel">Show</div>
+        </div>
+        <div class="group">
+          <div class="gbody">
+            <button class="big" data-cmd="zoomDialog" data-icon="find" title="Zoom"><span>Zoom</span></button>
+            <button class="big" data-cmd="zoom100" data-icon="zoom100" title="Zoom to 100%"><span>100%</span></button>
+            <button class="big" data-cmd="onePage" data-icon="onepage" title="Fit one whole page"><span>One Page</span></button>
+            <button class="big" data-cmd="pageWidth" data-icon="pagewidth" title="Fit the page width"><span>Page<br>Width</span></button>
+          </div>
+          <div class="glabel">Zoom</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="workspace">
+    <aside id="navpane" hidden>
+      <div class="np-head"><span>Navigation</span><button class="ico" data-cmd="navPane" data-icon="close" title="Close"></button></div>
+      <input id="nav-search" placeholder="Search document" spellcheck="false">
+      <div id="nav-list"></div>
+    </aside>
+    <div id="scroller">
+      <div id="zoomer">
+        <div id="page">
+          <div id="sheets" aria-hidden="true"></div>
+          <div id="boundaries"></div>
+          <div id="editor" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Document"></div>
+          <div id="comment-rail" aria-label="Comments"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="findbar" hidden>
+      <div class="frow">
+        <input id="find-input" placeholder="Find in document" spellcheck="false">
+        <span id="find-count"></span>
+        <button class="ico" data-find="prev" title="Previous result (Shift+Enter)" data-icon="up"></button>
+        <button class="ico" data-find="next" title="Next result (Enter)" data-icon="down"></button>
+        <label class="chk"><input type="checkbox" id="find-case"> Match case</label>
+        <label class="chk"><input type="checkbox" id="find-word"> Whole words</label>
+        <button class="ico" data-find="close" title="Close (Esc)" data-icon="close"></button>
+      </div>
+      <div class="frow" id="replace-row">
+        <input id="replace-input" placeholder="Replace with" spellcheck="false">
+        <button class="btn" data-find="replace">Replace</button>
+        <button class="btn" data-find="all">Replace All</button>
+      </div>
+    </div>
+
+    <div id="img-handles" hidden>
+      <span class="hd" data-h="nw"></span><span class="hd" data-h="ne"></span>
+      <span class="hd" data-h="sw"></span><span class="hd" data-h="se"></span>
+    </div>
+    <div id="imgbar" hidden>
+      <button class="btn" data-img="25">25%</button>
+      <button class="btn" data-img="50">50%</button>
+      <button class="btn" data-img="75">75%</button>
+      <button class="btn" data-img="100">100%</button>
+      <button class="ico" data-img="smaller" title="Smaller">−</button>
+      <button class="ico" data-img="larger" title="Larger">+</button>
+      <span class="sep"></span>
+      <button class="ico" data-img="inline" title="In line with text" data-icon="alignLeft"></button>
+      <button class="ico" data-img="center" title="Center on its own line" data-icon="alignCenter"></button>
+      <button class="ico" data-img="floatLeft" title="Wrap text, picture on the left" data-icon="wrapLeft"></button>
+      <button class="ico" data-img="floatRight" title="Wrap text, picture on the right" data-icon="wrapRight"></button>
+      <span class="sep"></span>
+      <button class="ico" data-img="delete" title="Delete picture" data-icon="trash"></button>
+    </div>
+  </main>
+
+  <footer id="statusbar">
+    <button class="st" id="st-page" data-cmd="goto" title="Go to page">Page 1 of 1</button>
+    <button class="st" id="st-words" data-cmd="wordCount" title="Word Count">0 words</button>
+    <button class="st" id="st-spell" data-cmd="spell" title="Turn spell checking on or off">Spelling: On</button>
+    <span class="st" id="st-saved"></span>
+    <div class="spacer"></div>
+    <button class="st-ico" data-cmd="focus" data-icon="focus" title="Focus mode"></button>
+    <button class="st-ico" data-cmd="printLayout" data-icon="printlayout" title="Print Layout"></button>
+    <button class="st-ico" data-cmd="webLayout" data-icon="web" title="Web Layout"></button>
+    <button class="st-ico" data-cmd="zoomOut" title="Zoom Out">−</button>
+    <input type="range" id="zoom-range" min="25" max="300" step="5" value="100" title="Zoom">
+    <button class="st-ico" data-cmd="zoomIn" title="Zoom In">+</button>
+    <button class="st" id="st-zoom" data-cmd="zoomDialog" title="Zoom">100%</button>
+  </footer>
+</div>
+
+<div id="backstage" hidden>
+  <nav id="bs-nav">
+    <button class="bs-back" data-cmd="closeBackstage" data-icon="back" title="Back to document (Esc)"></button>
+    <button class="bs-item active" data-bs="home" data-icon="home">Home</button>
+    <button class="bs-item" data-bs="new" data-icon="new">New</button>
+    <button class="bs-item" data-cmd="open" data-icon="open">Open</button>
+    <hr>
+    <button class="bs-item" data-cmd="save" data-icon="save">Save</button>
+    <button class="bs-item" data-cmd="saveAs" data-icon="saveas">Save As</button>
+    <button class="bs-item" data-cmd="pdf" data-icon="pdf">Export to PDF</button>
+    <button class="bs-item" data-cmd="printPreview" data-icon="preview">Print Preview</button>
+    <button class="bs-item" data-cmd="print" data-icon="print">Print</button>
+    <hr>
+    <button class="bs-item" data-bs="options" data-icon="gear">Options</button>
+    <button class="bs-item" data-bs="about" data-icon="info">About &amp; Shortcuts</button>
+    <button class="bs-item" data-cmd="closeDoc" data-icon="close">Close</button>
+  </nav>
+  <section class="bs-pane active" data-pane="home">
+    <h1 id="bs-greeting">Good morning</h1>
+    <div class="templates" id="tpl-home"></div>
+    <h2>Recent</h2>
+    <ul id="recent" class="recent"></ul>
+  </section>
+  <section class="bs-pane" data-pane="new">
+    <h1>New</h1>
+    <div class="templates" id="tpl-all"></div>
+  </section>
+  <section class="bs-pane" data-pane="options">
+    <h1>Options</h1>
+    <div class="opt-form">
+      <label class="field">Your name (shown on comments and tracked changes)<input id="opt-username" spellcheck="false" maxlength="60"></label>
+      <label class="field">Your initials<input id="opt-initials" spellcheck="false" maxlength="6"></label>
+      <p class="opt-note">Changes are saved automatically.</p>
+    </div>
+  </section>
+  <section class="bs-pane" data-pane="about">
+    <h1>Nisar Office Studio</h1>
+    <p class="lead">Version 1.1 ·A free, private word processor. Your documents stay on this PC. There is no account, no tracking, and no internet needed.</p>
+    <p>Opens and saves Word documents (.docx), web pages (.html) and plain text (.txt). Exports PDF. Formatting is kept exactly when a document is saved and reopened in Nisar Office Studio. Documents written in Microsoft Word or other apps open with their fonts, sizes, colours, highlights, alignment, spacing, lists, tables, pictures, links, page setup, headers and footers. Text boxes, comments, tracked changes and footnotes are simplified.</p>
+    <p>Unsaved work is backed up every 30 seconds. If the app closes unexpectedly, you'll be offered your document the next time it starts.</p>
+    <h2>Keyboard shortcuts</h2>
+    <div class="shortcuts" id="shortcuts"></div>
+  </section>
+</div>
+
+<div id="menu-layer"></div>
+<dialog id="modal"></dialog>
+<div id="toast" hidden></div>
+<div id="print-wm"></div>
+<script src="common.js"></script>
+<script src="app.js"></script>
+<script src="doc-features.js"></script>
+</body>
+</html>
